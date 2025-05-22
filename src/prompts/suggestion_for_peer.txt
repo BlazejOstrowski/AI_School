@@ -1,0 +1,2 @@
+Twoj prompt jest dobry, ale warto byłoby dodać informację, że quiz-bot ma najpierw poczekać na odpowiedź użytkownika,
+a dopiero potem ją ocenić. Dzięki temu rozmowa będzie bardziej interaktywna i realistyczna.
