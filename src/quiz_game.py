@@ -1,72 +1,172 @@
-# 1. Zapisujemy prompt quiz-bota do /prompts/best.txt
-# 2. Zostawiamy sugestię ulepszenia promptu kolegi do /prompts/suggestion_for_peer.txt
-# 3. Tworzymy prostą grę quizową w Pythonie (command line) w pliku quiz_game.py
-
 import os
+import argparse
+import json
+import logging
+from pathlib import Path
+from datetime import datetime
 
-# Tworzenie wymaganych folderów
-os.makedirs("prompts", exist_ok=True)
-os.makedirs("game", exist_ok=True)
+import openai
+from dotenv import load_dotenv
+from langchain.prompts import PromptTemplate
 
-# 1. Quiz-bot prompt (do użycia np. z GPT lub jako koncepcja)
-quiz_bot_prompt = """\
-Jesteś quiz-botem. Zadaj użytkownikowi jedno pytanie quizowe z czterema możliwymi odpowiedziami (A, B, C, D)
-z zakresu wiedzy ogólnej. Poczekaj na odpowiedź użytkownika. Następnie powiedz, czy odpowiedź była poprawna,
-podaj prawidłową odpowiedź i krótkie wyjaśnienie. Odpowiadaj po polsku i w przyjaznym tonie.
-"""
+# Ścieżki
+BASE_DIR = Path(__file__).resolve().parent.parent
+PROMPTS_DIR = BASE_DIR / "prompts"
+LOGS_DIR = BASE_DIR / "logs"
+RESULTS_DIR = BASE_DIR / "results"
+PROMPTS_DIR.mkdir(exist_ok=True)
+LOGS_DIR.mkdir(exist_ok=True)
+RESULTS_DIR.mkdir(exist_ok=True)
 
-with open("prompts/best.txt", "w", encoding="utf-8") as f:
-    f.write(quiz_bot_prompt)
+# Logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler(LOGS_DIR / "app.log"),
+        logging.StreamHandler()
+    ]
+)
 
-# 2. Sugestia
-peer_prompt_suggestion = """\
-Warto byłoby dodać informację, że quiz-bot ma najpierw poczekać na odpowiedź użytkownika,
-a dopiero potem ją ocenić. Dzięki temu rozmowa będzie bardziej interaktywna i realistyczna.
-"""
+# OpenAI setup
+load_dotenv()
+openai.api_type = "azure"
+openai.api_base = "https://openai-bost593.openai.azure.com"
+openai.api_version = "2024-12-01-preview"
+openai.api_key = os.getenv("AZURE_OPENAI_KEY")
+DEPLOYMENT_NAME = "gpt-4o"
 
-with open("prompts/suggestion_for_peer.txt", "w", encoding="utf-8") as f:
-    f.write(peer_prompt_suggestion)
+def create_best_prompt():
+    prompt = PromptTemplate.from_template(
+        "Jesteś quiz-botem. Zadaj pytanie z czterema odpowiedziami (A, B, C, D). Oznacz prawidłową."
+    )
+    with open(PROMPTS_DIR / "best.txt", "w", encoding="utf-8") as f:
+        f.write(prompt.template)
+    logging.info("Zapisano prompt quiz-bota.")
 
-# 3. Gra w Pythonie (command line quiz)
-quiz_game_code = """\
-# Prosta gra quizowa do terminala (Day 7 demo)
-questions = [
-    {
-        "question": "Który pierwiastek ma symbol 'H'?",
-        "options": ["A) Hel", "B) Wodór", "C) Wapń", "D) Tlen"],
-        "answer": "B"
-    },
-    {
-        "question": "Ile kontynentów ma Ziemia?",
-        "options": ["A) 5", "B) 6", "C) 7", "D) 8"],
-        "answer": "C"
-    },
-    {
-        "question": "Kto napisał 'Lalkę'?",
-        "options": ["A) Henryk Sienkiewicz", "B) Adam Mickiewicz", "C) Eliza Orzeszkowa", "D) Bolesław Prus"],
-        "answer": "D"
+def suggest_peer_improvement():
+    suggestion = "Dodaj tło historyczne do pytania, np. kontekst epoki."
+    with open(PROMPTS_DIR / "suggestion_for_peer.txt", "w", encoding="utf-8") as f:
+        f.write(suggestion)
+    logging.info("Zapisano sugestię dla promptu kolegi.")
+
+def calculate_cost(input_tokens: int, output_tokens: int) -> float:
+    return round((input_tokens * 0.01 + output_tokens * 0.03) / 1000, 6)
+
+def log_prompts(prompts: list[str]):
+    usage_list = []
+    for prompt in prompts:
+        try:
+            response = openai.ChatCompletion.create(
+                engine=DEPLOYMENT_NAME,
+                messages=[{"role": "user", "content": prompt}]
+            )
+            usage = response["usage"]
+            input_toks = usage["prompt_tokens"]
+            output_toks = usage["completion_tokens"]
+            total_toks = usage["total_tokens"]
+            cost = calculate_cost(input_toks, output_toks)
+
+            usage_entry = {
+                "prompt": prompt,
+                "prompt_tokens": input_toks,
+                "completion_tokens": output_toks,
+                "total_tokens": total_toks,
+                "cost": cost,
+                "timestamp": datetime.now().isoformat()
+            }
+            usage_list.append(usage_entry)
+            logging.info(f"Zalogowano prompt: {prompt}")
+        except Exception as e:
+            logging.error(f"Błąd zapytania: {e}")
+
+    with open(LOGS_DIR / "usage.json", "w", encoding="utf-8") as f:
+        json.dump(usage_list, f, indent=2, ensure_ascii=False)
+
+def run_quiz_game():
+    questions = [
+        {
+            "question": "Jakie miasto jest stolicą Polski?",
+            "options": ["A) Kraków", "B) Gdańsk", "C) Warszawa", "D) Łódź"],
+            "answer": "C"
+        },
+        {
+            "question": "Co to jest 15 * 3?",
+            "options": ["A) 35", "B) 40", "C) 45", "D) 50"],
+            "answer": "C"
+        },
+        {
+            "question": "Który pierwiastek ma symbol 'O'?",
+            "options": ["A) Osm", "B) Tlen", "C) Ołów", "D) Oran"],
+            "answer": "B"
+        }
+    ]
+
+    prize = 1000
+    game_log = {
+        "start_time": datetime.now().isoformat(),
+        "answers": [],
+        "final_prize": 0
     }
-]
 
-score = 0
+    print("\n🎮 Witaj w grze 'Milionerzy'!")
 
-for q in questions:
-    print("\\n" + q["question"])
-    for option in q["options"]:
-        print(option)
-    user_answer = input("Twoja odpowiedź (A/B/C/D): ").strip().upper()
-    if user_answer == q["answer"]:
-        print("Poprawna odpowiedź!")
-        score += 1
+    for i, q in enumerate(questions, 1):
+        print(f"\nPytanie {i}: {q['question']}")
+        for option in q["options"]:
+            print(option)
+        user_answer = input("Wybierz (A/B/C/D): ").strip().upper()
+        correct = user_answer == q["answer"]
+        game_log["answers"].append({
+            "question": q["question"],
+            "user_answer": user_answer,
+            "correct": correct,
+            "prize_before": prize
+        })
+
+        if correct:
+            print("Poprawna odpowiedź :)!")
+            prize *= 2
+        else:
+            print(f"Błędna odpowiedź :(. Poprawna to: {q['answer']}")
+            prize = 0
+            break
+
+    game_log["final_prize"] = prize
+    game_log["end_time"] = datetime.now().isoformat()
+
+    with open(RESULTS_DIR / "game_results.json", "w", encoding="utf-8") as f:
+        json.dump(game_log, f, indent=2, ensure_ascii=False)
+
+    logging.info(f"Gra zakończona. Wygrana: {prize} zł.")
+    print(f"\n💰 Gra zakończona. Twoja wygrana to: {prize} zł.")
+
+def main():
+    parser = argparse.ArgumentParser(description="Quiz-bot CLI")
+    subparsers = parser.add_subparsers(dest="command")
+
+    subparsers.add_parser("generate_prompt", help="Zapisz prompt quiz-bota")
+    subparsers.add_parser("suggest_peer", help="Zapisz sugestię dla promptu kolegi")
+    subparsers.add_parser("play_game", help="Zagraj w quiz w stylu Milionerzy")
+    subparsers.add_parser("log", help="Zaloguj użycie promptów")
+
+    args = parser.parse_args()
+
+    if args.command == "generate_prompt":
+        create_best_prompt()
+    elif args.command == "suggest_peer":
+        suggest_peer_improvement()
+    elif args.command == "play_game":
+        run_quiz_game()
+    elif args.command == "log":
+        prompts = [
+            "Opisz krótko historię Polski.",
+            "Policz pierwiastek kwadratowy z 987654321.",
+            "Podaj przepisy na 3 szybkie obiady z ziemniaków."
+        ]
+        log_prompts(prompts)
     else:
-        print(f"Błędna odpowiedź. Poprawna to: {q['answer']}")
+        parser.print_help()
 
-print(f"\\nTwój wynik końcowy: {score}/{len(questions)}")
-"""
-
-with open("game/quiz_game.py", "w", encoding="utf-8") as f:
-    f.write(quiz_game_code)
-
-# Spakuj projekt do pobrania
-import shutil
-shutil.make_archive("/mnt/data/quiz_project_day7_clean", 'zip', '.')
+if __name__ == "__main__":
+    main()

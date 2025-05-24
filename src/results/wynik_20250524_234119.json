@@ -1,0 +1,34 @@
+{
+  "data": "2025-05-24T23:41:19.110278",
+  "odpowiedzi": [
+    {
+      "pytanie": "Który pierwiastek chemiczny ma symbol 'O'?",
+      "odpowiedz": "A",
+      "poprawna": "A",
+      "czy_poprawna": true,
+      "kwota": 500
+    },
+    {
+      "pytanie": "Kto był autorem powieści 'Potop'?",
+      "odpowiedz": "C",
+      "poprawna": "C",
+      "czy_poprawna": true,
+      "kwota": 1000
+    },
+    {
+      "pytanie": "Jak nazywa się stolica Japonii?",
+      "odpowiedz": "B",
+      "poprawna": "B",
+      "czy_poprawna": true,
+      "kwota": 2000
+    },
+    {
+      "pytanie": "Ile wynosi liczba Pi (π) zaokrąglona do dwóch miejsc po przecinku?",
+      "odpowiedz": "B",
+      "poprawna": "B",
+      "czy_poprawna": true,
+      "kwota": 5000
+    }
+  ],
+  "nagroda_koncowa": 5000
+}

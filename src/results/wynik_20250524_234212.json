@@ -1,0 +1,13 @@
+{
+  "data": "2025-05-24T23:42:12.049695",
+  "odpowiedzi": [
+    {
+      "pytanie": "Która planeta w Układzie Słonecznym jest najbliżej Słońca?",
+      "odpowiedz": "C",
+      "poprawna": "A",
+      "czy_poprawna": false,
+      "kwota": 500
+    }
+  ],
+  "nagroda_koncowa": 0
+}

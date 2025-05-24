@@ -1,0 +1,13 @@
+{
+  "data": "2025-05-24T23:41:39.115098",
+  "odpowiedzi": [
+    {
+      "pytanie": "Która planeta w Układzie Słonecznym jest największa?",
+      "odpowiedz": "D",
+      "poprawna": "A",
+      "czy_poprawna": false,
+      "kwota": 500
+    }
+  ],
+  "nagroda_koncowa": 0
+}

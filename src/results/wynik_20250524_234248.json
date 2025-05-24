@@ -1,0 +1,20 @@
+{
+  "data": "2025-05-24T23:42:48.020428",
+  "odpowiedzi": [
+    {
+      "pytanie": "Które państwo jest największe pod względem powierzchni na świecie?",
+      "odpowiedz": "A",
+      "poprawna": "A",
+      "czy_poprawna": true,
+      "kwota": 500
+    },
+    {
+      "pytanie": "Który pierwiastek chemiczny ma symbol 'O'?",
+      "odpowiedz": "C",
+      "poprawna": "B",
+      "czy_poprawna": false,
+      "kwota": 1000
+    }
+  ],
+  "nagroda_koncowa": 500
+}

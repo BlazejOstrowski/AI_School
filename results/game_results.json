@@ -1,0 +1,25 @@
+{
+  "start_time": "2025-05-24T22:52:31.118949",
+  "answers": [
+    {
+      "question": "Jakie miasto jest stolicą Polski?",
+      "user_answer": "C",
+      "correct": true,
+      "prize_before": 1000
+    },
+    {
+      "question": "Co to jest 15 * 3?",
+      "user_answer": "C",
+      "correct": true,
+      "prize_before": 2000
+    },
+    {
+      "question": "Który pierwiastek ma symbol 'O'?",
+      "user_answer": "B",
+      "correct": true,
+      "prize_before": 4000
+    }
+  ],
+  "final_prize": 8000,
+  "end_time": "2025-05-24T22:53:04.218731"
+}

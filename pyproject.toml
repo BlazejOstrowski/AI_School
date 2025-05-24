@@ -1,0 +1,13 @@
+[project]
+name = "AI_School"
+version = "0.1.0"
+description = "Projekt z OpenAI i logowaniem promptów"
+authors = ["Błażej Ostrowski"]
+dependencies = [
+    "openai",
+    "python-dotenv"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
