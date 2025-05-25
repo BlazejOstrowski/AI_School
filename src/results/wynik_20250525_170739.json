@@ -1,0 +1,34 @@
+{
+  "data": "2025-05-25T17:07:39.465169",
+  "odpowiedzi": [
+    {
+      "pytanie": "Jak nazywa się stolica Polski?",
+      "odpowiedz": "A",
+      "poprawna": "A",
+      "czy_poprawna": true,
+      "kwota": 500
+    },
+    {
+      "pytanie": "Która planeta znajduje się najbliżej Słońca?",
+      "odpowiedz": "B",
+      "poprawna": "B",
+      "czy_poprawna": true,
+      "kwota": 1000
+    },
+    {
+      "pytanie": "Kto napisał 'Pan Tadeusz'?",
+      "odpowiedz": "B",
+      "poprawna": "B",
+      "czy_poprawna": true,
+      "kwota": 2000
+    },
+    {
+      "pytanie": "Jak nazywa się największy ocean na Ziemi?",
+      "odpowiedz": "D",
+      "poprawna": "C",
+      "czy_poprawna": false,
+      "kwota": 5000
+    }
+  ],
+  "nagroda_koncowa": 1000
+}

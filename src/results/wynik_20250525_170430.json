@@ -1,0 +1,13 @@
+{
+  "data": "2025-05-25T17:04:30.065950",
+  "odpowiedzi": [
+    {
+      "pytanie": "Które państwo jest największe pod względem powierzchni?",
+      "odpowiedz": "B",
+      "poprawna": "A",
+      "czy_poprawna": false,
+      "kwota": 500
+    }
+  ],
+  "nagroda_koncowa": 0
+}

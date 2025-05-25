@@ -1,0 +1,34 @@
+{
+  "data": "2025-05-25T17:06:52.627514",
+  "odpowiedzi": [
+    {
+      "pytanie": "Które miasto jest stolicą Polski?",
+      "odpowiedz": "A",
+      "poprawna": "A",
+      "czy_poprawna": true,
+      "kwota": 500
+    },
+    {
+      "pytanie": "Który pierwiastek chemiczny ma symbol 'O'?",
+      "odpowiedz": "B",
+      "poprawna": "B",
+      "czy_poprawna": true,
+      "kwota": 1000
+    },
+    {
+      "pytanie": "Jak nazywa się największa planeta w Układzie Słonecznym?",
+      "odpowiedz": "C",
+      "poprawna": "C",
+      "czy_poprawna": true,
+      "kwota": 2000
+    },
+    {
+      "pytanie": "Która wojna zakończyła się w 1945 roku?",
+      "odpowiedz": "C",
+      "poprawna": "C",
+      "czy_poprawna": true,
+      "kwota": 5000
+    }
+  ],
+  "nagroda_koncowa": 5000
+}
