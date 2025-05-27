@@ -1,0 +1,7 @@
+2025-05-26 14:16:46,805 [INFO] Game started.
+2025-05-26 14:16:46,843 [INFO] Initializing game interface.
+2025-05-26 14:16:46,843 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-26 14:16:49,416 [INFO] Received response from OpenAI.
+2025-05-26 14:16:49,416 [INFO] Parsed 4 questions successfully.
+2025-05-26 14:16:49,483 [INFO] Background image loaded.
+2025-05-26 14:16:49,485 [INFO] Displaying question 1.

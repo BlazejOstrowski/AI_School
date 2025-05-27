@@ -5,10 +5,22 @@ from tkinter import messagebox
 from datetime import datetime
 from pathlib import Path
 import random
+import logging
 
 from PIL import Image, ImageTk
 import openai
 from dotenv import load_dotenv
+
+# Logger setup
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler("game.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
 
 # Paths
 BASE_DIR = Path(__file__).resolve().parent
@@ -36,22 +48,27 @@ def fetch_questions():
         "[{'question': '...', 'options': ['A) ...', 'B) ...', 'C) ...', 'D) ...'], 'answer': 'A'}]"
     )
     try:
+        logger.info("Sending request to OpenAI for quiz questions.")
         response = openai.ChatCompletion.create(
             engine=DEPLOYMENT_NAME,
             messages=[{"role": "user", "content": prompt}]
         )
         content = response["choices"][0]["message"]["content"]
+        logger.info("Received response from OpenAI.")
 
         import re
         clean_content = re.sub(r"^```json|```$", "", content, flags=re.MULTILINE).strip()
-        return json.loads(clean_content)
+        questions = json.loads(clean_content)
+        logger.info(f"Parsed {len(questions)} questions successfully.")
+        return questions
     except Exception as e:
-        print("Error fetching questions:", e)
+        logger.error(f"Error fetching questions: {e}")
         return []
 
 
 class MillionaireGame:
     def __init__(self, root):
+        logger.info("Initializing game interface.")
         self.root = root
         self.root.title("Who Wants to Be a Millionaire?")
         self.questions = fetch_questions()
@@ -60,7 +77,6 @@ class MillionaireGame:
         self.results = []
         self.used_5050 = False
 
-        # Background
         self.canvas = tk.Canvas(self.root, width=800, height=600)
         self.canvas.pack(fill="both", expand=True)
 
@@ -69,16 +85,16 @@ class MillionaireGame:
             self.bg_image = Image.open(bg_path).resize((800, 600))
             self.bg_photo = ImageTk.PhotoImage(self.bg_image)
             self.canvas.create_image(0, 0, image=self.bg_photo, anchor="nw")
+            logger.info("Background image loaded.")
+        else:
+            logger.warning("Background image not found.")
 
-        # Score label
         self.score_label = tk.Label(self.root, text="Score: 0 zł", font=("Arial", 12, "bold"), bg="white")
         self.score_label.place(x=50, y=10)
 
-        # Question label
         self.question_label = tk.Label(self.root, text="", font=("Arial", 14), wraplength=700, bg="white")
         self.question_label.place(x=50, y=40)
 
-        # Answer buttons
         self.buttons = []
         for i in range(4):
             btn = tk.Button(self.root, text="", font=("Arial", 12), width=50,
@@ -86,11 +102,9 @@ class MillionaireGame:
             btn.place(x=150, y=120 + i * 60)
             self.buttons.append(btn)
 
-        # 50:50 button
         self.btn_5050 = tk.Button(self.root, text="50:50", font=("Arial", 10), command=self.use_5050)
         self.btn_5050.place(x=700, y=10)
 
-        # Quit button
         self.btn_quit = tk.Button(self.root, text="Quit and take reward", font=("Arial", 10),
                                   command=self.quit_game)
         self.btn_quit.place(x=550, y=10)
@@ -99,6 +113,7 @@ class MillionaireGame:
 
     def show_question(self):
         if self.index < len(self.questions):
+            logger.info(f"Displaying question {self.index + 1}.")
             self.btn_5050.config(state="normal" if not self.used_5050 else "disabled")
             q = self.questions[self.index]
             self.question_label.config(text=f"{self.index + 1}. {q['question']}")
@@ -106,6 +121,7 @@ class MillionaireGame:
                 self.buttons[i].config(text=q['options'][i], state="normal")
             self.score_label.config(text=f"Score: {self.reward} zł")
         else:
+            logger.info("All questions completed. Ending game.")
             self.end_game(won=True)
 
     def check_answer(self, idx):
@@ -113,6 +129,8 @@ class MillionaireGame:
         selected = question["options"][idx][0]
         correct = question["answer"]
         is_correct = selected == correct
+
+        logger.info(f"Question answered. Selected: {selected}, Correct: {correct}, Result: {'Correct' if is_correct else 'Incorrect'}")
 
         self.results.append({
             "question": question["question"],
@@ -131,6 +149,7 @@ class MillionaireGame:
 
     def use_5050(self):
         if self.used_5050:
+            logger.warning("50:50 already used.")
             return
         question = self.questions[self.index]
         correct = question["answer"]
@@ -140,8 +159,10 @@ class MillionaireGame:
             self.buttons[i].config(state="disabled")
         self.used_5050 = True
         self.btn_5050.config(state="disabled")
+        logger.info("50:50 lifeline used.")
 
     def quit_game(self):
+        logger.info("Player quit the game.")
         self.end_game(won=True)
 
     def end_game(self, won):
@@ -155,16 +176,22 @@ class MillionaireGame:
         }
 
         result_path = RESULTS_DIR / f"result_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        with open(result_path, "w", encoding="utf-8") as f:
-            json.dump(result_data, f, indent=2, ensure_ascii=False)
+        try:
+            with open(result_path, "w", encoding="utf-8") as f:
+                json.dump(result_data, f, indent=2, ensure_ascii=False)
+            logger.info(f"Result saved to {result_path}")
+        except Exception as e:
+            logger.error(f"Error saving result file: {e}")
 
-        msg = f" You won {self.reward} zł!" if won else f"Game over. You won: {self.reward} zł"
+        msg = f"You won {self.reward} zł!" if won else f"Game over. You won: {self.reward} zł"
         messagebox.showinfo("Result", msg)
         self.root.destroy()
 
 
 if __name__ == "__main__":
+    logger.info("Game started.")
     root = tk.Tk()
     root.geometry("800x600")
     app = MillionaireGame(root)
     root.mainloop()
+    logger.info("Game ended.")
