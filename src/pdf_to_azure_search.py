@@ -1,115 +1,184 @@
 import os
-import json
-import fitz  # PyMuPDF
 import uuid
+import fitz  # PyMuPDF
 import nbformat
-from nbformat.v4 import new_notebook, new_code_cell, new_output
+from nbformat.v4 import new_code_cell
 from dotenv import load_dotenv
-
-from openai import AzureOpenAI
 from azure.core.credentials import AzureKeyCredential
 from azure.search.documents import SearchClient
+from azure.search.documents.indexes import SearchIndexClient
+from azure.search.documents.indexes.models import (
+    SearchIndex, SearchField, SearchFieldDataType,
+    VectorSearch, HnswAlgorithmConfiguration, VectorSearchProfile
+)
+from openai import AzureOpenAI
+from lc_plugins.search_plugin import langchain_search_plugin
 
-# Wczytanie zmiennych środowiskowych
+# Wczytaj zmienne
 load_dotenv()
-
-# Konfiguracja
-PDF_PATH = os.path.join(os.path.dirname(__file__), "..", "pdf.pdf")
-CHUNK_SIZE = 500
 SEARCH_ENDPOINT = os.getenv("AZURE_SEARCH_ENDPOINT")
 SEARCH_KEY = os.getenv("AZURE_SEARCH_KEY")
-SEARCH_INDEX = "pdf-index"
+OPENAI_KEY = os.getenv("AZURE_OPENAI_KEY")
+OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
 
-AZURE_OPENAI_ENDPOINT = "https://openai-bost593.openai.azure.com"
-AZURE_OPENAI_KEY = os.getenv("AZURE_OPENAI_KEY")
-AZURE_OPENAI_API_VERSION = "2024-12-01-preview"
-EMBEDDING_DEPLOYMENT_NAME = "text-embedding-ada-002"
+# Parametry
+INDEX_NAME = "pdf-index"
+PDF_FOLDER = os.path.join(os.path.dirname(__file__), "..", "brochures")
+CHUNK_SIZE = 500
+EMBEDDING_MODEL = "text-embedding-ada-002"
+CHAT_DEPLOYMENT = "gpt-4o"
+NOTEBOOK_PATH = os.path.join("..", "notebooks", "queries.ipynb")
 
-# Klient OpenAI
+# Klienci
 openai_client = AzureOpenAI(
-    api_version=AZURE_OPENAI_API_VERSION,
-    azure_endpoint=AZURE_OPENAI_ENDPOINT,
-    api_key=AZURE_OPENAI_KEY
+    api_key=OPENAI_KEY,
+    azure_endpoint=OPENAI_ENDPOINT,
+    api_version="2024-12-01-preview"
 )
+search_admin = SearchIndexClient(SEARCH_ENDPOINT, AzureKeyCredential(SEARCH_KEY))
+search_client = SearchClient(SEARCH_ENDPOINT, INDEX_NAME, AzureKeyCredential(SEARCH_KEY))
 
-# Klient wyszukiwania
-search_client = SearchClient(
-    endpoint=SEARCH_ENDPOINT,
-    index_name=SEARCH_INDEX,
-    credential=AzureKeyCredential(SEARCH_KEY)
-)
+# Tworzenie indeksu
+def create_index():
+    if INDEX_NAME in [i.name for i in search_admin.list_indexes()]:
+        print("Indeks już istnieje — usuwam...")
+        search_admin.delete_index(INDEX_NAME)
 
-# Chunkowanie PDF
-print("[INFO] Chunking PDF...")
-doc = fitz.open(PDF_PATH)
-text = "".join([page.get_text() for page in doc])
-words = text.split()
-chunks = [" ".join(words[i:i + CHUNK_SIZE]) for i in range(0, len(words), CHUNK_SIZE)]
-
-# Embedding + Upload
-print("[INFO] Generating embeddings and uploading to Azure Search...")
-documents = []
-for chunk in chunks:
-    response = openai_client.embeddings.create(
-        model=EMBEDDING_DEPLOYMENT_NAME,
-        input=chunk
+    index = SearchIndex(
+        name=INDEX_NAME,
+        fields=[
+            SearchField(name="id", type=SearchFieldDataType.String, key=True),
+            SearchField(name="filename", type=SearchFieldDataType.String, filterable=True),
+            SearchField(name="content", type=SearchFieldDataType.String, searchable=True),
+            SearchField(
+                name="embedding",
+                type=SearchFieldDataType.Collection(SearchFieldDataType.Single),
+                searchable=True,
+                vector_search_dimensions=1536,
+                vector_search_profile_name="default"
+            )
+        ],
+        vector_search=VectorSearch(
+            algorithms=[HnswAlgorithmConfiguration(name="default")],
+            profiles=[VectorSearchProfile(name="default", algorithm_configuration_name="default")]
+        )
     )
-    embedding = response.data[0].embedding
-    doc_id = str(uuid.uuid4())
-    documents.append({
-        "id": doc_id,
-        "content": chunk,
-        "embedding": embedding
-    })
+    search_admin.create_index(index)
+    print("Utworzono indeks:", INDEX_NAME)
 
-search_client.upload_documents(documents)
-print(f"[DONE] Uploaded {len(documents)} chunks to Azure Search index '{SEARCH_INDEX}'.")
+# Chunkowanie PDF-a
+def extract_chunks_from_pdf(path, chunk_size=CHUNK_SIZE):
+    doc = fitz.open(path)
+    text = "".join([page.get_text() for page in doc])
+    return [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
 
-# Vector Query (NOWA SYNTAKSA)
-print("[INFO] Running vector search...")
-query_text = "What is this PDF about?"
-query_embedding = openai_client.embeddings.create(
-    model=EMBEDDING_DEPLOYMENT_NAME,
-    input=query_text
-).data[0].embedding
+# Indeksowanie folderu PDF
+def index_documents_from_folder(folder):
+    docs = []
+    for filename in os.listdir(folder):
+        if filename.lower().endswith(".pdf"):
+            path = os.path.join(folder, filename)
+            chunks = extract_chunks_from_pdf(path)
+            print(f"{filename} → {len(chunks)} chunks")
 
-vector_results = search_client.search(
-    search_text=None,
-    vector_queries=[{
-        "kind": "vector",
-        "vector": query_embedding,
-        "fields": "embedding",
-        "k": 3
-    }]
-)
+            for chunk in chunks:
+                embedding = openai_client.embeddings.create(
+                    model=EMBEDDING_MODEL,
+                    input=chunk
+                ).data[0].embedding
+                docs.append({
+                    "id": str(uuid.uuid4()),
+                    "filename": filename,
+                    "content": chunk,
+                    "embedding": embedding
+                })
 
+    result = search_client.upload_documents(documents=docs)
+    print("Zaindeksowano:", len(docs))
 
-vector_output = [doc for doc in vector_results]
+# Zapisywanie do notebooka
+def save_to_notebook(question, vector_answer, semantic_answer):
+    os.makedirs(os.path.dirname(NOTEBOOK_PATH), exist_ok=True)
+    if os.path.exists(NOTEBOOK_PATH):
+        with open(NOTEBOOK_PATH, "r", encoding="utf-8") as f:
+            nb = nbformat.read(f, as_version=4)
+    else:
+        nb = nbformat.v4.new_notebook()
 
-# Semantic Query
-print("[INFO] Running semantic search...")
-semantic_results = search_client.search(
-    search_text=query_text,
-    top=3
-)
-semantic_output = [doc for doc in semantic_results]
+    nb.cells.append(new_code_cell(f"# Question: {question}\n\n## Vector Result:\n```json\n{vector_answer}\n```"))
+    nb.cells.append(new_code_cell(f"## Semantic Result:\n```json\n{semantic_answer}\n```"))
 
-# Zapis do notebooka
-print("[INFO] Saving results to notebook...")
-notebook_path = "notebooks/queries.ipynb"
-os.makedirs("notebooks", exist_ok=True)
+    with open(NOTEBOOK_PATH, "w", encoding="utf-8") as f:
+        nbformat.write(nb, f)
 
-nb = new_notebook()
-nb.cells = [
-    new_code_cell(source="# Vector Query Result", outputs=[
-        new_output("execute_result", data={"application/json": vector_output}, execution_count=1)
-    ]),
-    new_code_cell(source="# Semantic Query Result", outputs=[
-        new_output("execute_result", data={"application/json": json.dumps(semantic_output, indent=2)}, execution_count=2)
-    ])
-]
+# Interaktywna sesja pytań
+def ask_questions():
+    while True:
+        q = input("\nTwoje pytanie ('exit' aby zakończyć): ")
+        if q.lower() in ["exit", "quit"]:
+            break
 
-with open(notebook_path, "w", encoding="utf-8") as f:
-    nbformat.write(nb, f)
+        prompt = [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": q}
+        ]
 
-print(f"[DONE] Saved query results to {notebook_path}")
+        vector_query = {
+            "data_sources": [
+                {
+                    "type": "azure_search",
+                    "parameters": {
+                        "endpoint": SEARCH_ENDPOINT,
+                        "index_name": INDEX_NAME,
+                        "authentication": {"type": "api_key", "key": SEARCH_KEY},
+                        "query_type": "vector",
+                        "embedding_dependency": {"type": "deployment_name", "deployment_name": EMBEDDING_MODEL},
+                        "top_n_documents": 5
+                    }
+                }
+            ]
+        }
+
+        semantic_query = {
+            "data_sources": [
+                {
+                    "type": "azure_search",
+                    "parameters": {
+                        "endpoint": SEARCH_ENDPOINT,
+                        "index_name": INDEX_NAME,
+                        "authentication": {"type": "api_key", "key": SEARCH_KEY},
+                        "query_type": "simple"
+                    }
+                }
+            ]
+        }
+
+        vector_response = openai_client.chat.completions.create(
+            model=CHAT_DEPLOYMENT,
+            messages=prompt,
+            extra_body=vector_query
+        ).choices[0].message.content
+
+        semantic_response = openai_client.chat.completions.create(
+            model=CHAT_DEPLOYMENT,
+            messages=prompt,
+            extra_body=semantic_query
+        ).choices[0].message.content
+
+        print("\nVector:", vector_response)
+        print("\nSemantic:", semantic_response)
+        save_to_notebook(q, vector_response, semantic_response)
+
+# Test pluginu LangChain
+def test_plugin():
+    test_question = "What is in the brochure?"
+    plugin_result = langchain_search_plugin(test_question)
+    print("\nLangChain Plugin Result:\n", plugin_result)
+    save_to_notebook("Plugin Test", plugin_result, "(not applicable)")
+
+# === Wykonanie ===
+if __name__ == "__main__":
+    create_index()
+    index_documents_from_folder(PDF_FOLDER)
+    test_plugin()
+    ask_questions()

@@ -5,3 +5,264 @@
 2025-05-26 14:16:49,416 [INFO] Parsed 4 questions successfully.
 2025-05-26 14:16:49,483 [INFO] Background image loaded.
 2025-05-26 14:16:49,485 [INFO] Displaying question 1.
+2025-05-27 13:26:16,655 [INFO] Game started.
+2025-05-27 13:26:16,740 [INFO] Initializing game interface.
+2025-05-27 13:26:16,740 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:26:16,741 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:26:16,872 [INFO] Background image loaded.
+2025-05-27 13:26:16,877 [INFO] All questions completed. Ending game.
+2025-05-27 13:26:16,877 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132616.json
+2025-05-27 13:26:18,238 [INFO] Game ended.
+2025-05-27 13:26:24,791 [INFO] Game started.
+2025-05-27 13:26:25,017 [INFO] Initializing game interface.
+2025-05-27 13:26:25,017 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:26:25,017 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:26:25,082 [INFO] Background image loaded.
+2025-05-27 13:26:25,085 [INFO] All questions completed. Ending game.
+2025-05-27 13:26:25,085 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132625.json
+2025-05-27 13:26:26,294 [INFO] Game ended.
+2025-05-27 13:26:29,549 [INFO] Game started.
+2025-05-27 13:26:29,590 [INFO] Initializing game interface.
+2025-05-27 13:26:29,590 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:26:29,590 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:26:29,651 [INFO] Background image loaded.
+2025-05-27 13:26:29,653 [INFO] All questions completed. Ending game.
+2025-05-27 13:26:29,653 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132629.json
+2025-05-27 13:26:30,807 [INFO] Game ended.
+2025-05-27 13:26:42,896 [INFO] Game started.
+2025-05-27 13:26:42,938 [INFO] Initializing game interface.
+2025-05-27 13:26:42,938 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:26:42,938 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:26:43,146 [INFO] Background image loaded.
+2025-05-27 13:26:43,149 [INFO] All questions completed. Ending game.
+2025-05-27 13:26:43,149 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132643.json
+2025-05-27 13:26:44,369 [INFO] Game ended.
+2025-05-27 13:26:46,306 [INFO] Game started.
+2025-05-27 13:26:46,349 [INFO] Initializing game interface.
+2025-05-27 13:26:46,349 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:26:46,349 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:26:46,410 [INFO] Background image loaded.
+2025-05-27 13:26:46,411 [INFO] All questions completed. Ending game.
+2025-05-27 13:26:46,413 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132646.json
+2025-05-27 13:26:47,791 [INFO] Game ended.
+2025-05-27 13:27:09,330 [INFO] Game started.
+2025-05-27 13:27:09,487 [INFO] Initializing game interface.
+2025-05-27 13:27:09,487 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:27:09,487 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:27:09,852 [INFO] Background image loaded.
+2025-05-27 13:27:09,877 [INFO] All questions completed. Ending game.
+2025-05-27 13:27:09,878 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132709.json
+2025-05-27 13:27:11,087 [INFO] Game ended.
+2025-05-27 13:27:13,676 [INFO] Game started.
+2025-05-27 13:27:13,723 [INFO] Initializing game interface.
+2025-05-27 13:27:13,723 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:27:13,723 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:27:13,799 [INFO] Background image loaded.
+2025-05-27 13:27:13,801 [INFO] All questions completed. Ending game.
+2025-05-27 13:27:13,801 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132713.json
+2025-05-27 13:27:16,090 [INFO] Game ended.
+2025-05-27 13:27:18,644 [INFO] Game started.
+2025-05-27 13:27:18,690 [INFO] Initializing game interface.
+2025-05-27 13:27:18,690 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:27:18,690 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:27:18,756 [INFO] Background image loaded.
+2025-05-27 13:27:18,757 [INFO] All questions completed. Ending game.
+2025-05-27 13:27:18,758 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132718.json
+2025-05-27 13:27:20,419 [INFO] Game ended.
+2025-05-27 13:27:39,704 [INFO] Game started.
+2025-05-27 13:27:39,750 [INFO] Initializing game interface.
+2025-05-27 13:27:39,751 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:27:39,751 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:27:39,815 [INFO] Background image loaded.
+2025-05-27 13:27:39,817 [INFO] All questions completed. Ending game.
+2025-05-27 13:27:39,818 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132739.json
+2025-05-27 13:27:41,140 [INFO] Game ended.
+2025-05-27 13:27:43,964 [INFO] Game started.
+2025-05-27 13:27:44,006 [INFO] Initializing game interface.
+2025-05-27 13:27:44,006 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:27:44,006 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:27:44,074 [INFO] Background image loaded.
+2025-05-27 13:27:44,078 [INFO] All questions completed. Ending game.
+2025-05-27 13:27:44,078 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132744.json
+2025-05-27 13:27:49,549 [INFO] Game started.
+2025-05-27 13:27:49,590 [INFO] Initializing game interface.
+2025-05-27 13:27:49,590 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:27:49,590 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:27:49,650 [INFO] Background image loaded.
+2025-05-27 13:27:49,652 [INFO] All questions completed. Ending game.
+2025-05-27 13:27:49,653 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132749.json
+2025-05-27 13:28:19,595 [INFO] Game started.
+2025-05-27 13:28:19,638 [INFO] Initializing game interface.
+2025-05-27 13:28:19,638 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:28:19,638 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:28:19,701 [INFO] Background image loaded.
+2025-05-27 13:28:19,704 [INFO] All questions completed. Ending game.
+2025-05-27 13:28:19,704 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_132819.json
+2025-05-27 13:29:54,746 [INFO] Game ended.
+2025-05-27 13:30:55,354 [INFO] Game started.
+2025-05-27 13:30:55,394 [INFO] Initializing game interface.
+2025-05-27 13:30:55,394 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:30:55,394 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:30:55,456 [INFO] Background image loaded.
+2025-05-27 13:30:55,458 [INFO] All questions completed. Ending game.
+2025-05-27 13:30:55,459 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_133055.json
+2025-05-27 13:31:01,404 [INFO] Game ended.
+2025-05-27 13:31:12,410 [INFO] Game started.
+2025-05-27 13:31:12,452 [INFO] Initializing game interface.
+2025-05-27 13:31:12,452 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 13:31:12,452 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 13:31:12,513 [INFO] Background image loaded.
+2025-05-27 13:31:12,516 [INFO] All questions completed. Ending game.
+2025-05-27 13:31:12,517 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_133112.json
+2025-05-27 13:31:13,874 [INFO] Game ended.
+2025-05-27 14:27:54,600 [INFO] Game started.
+2025-05-27 14:27:54,644 [INFO] Initializing game interface.
+2025-05-27 14:27:54,644 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 14:27:54,645 [ERROR] Error fetching questions: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+
+2025-05-27 14:27:54,713 [INFO] Background image loaded.
+2025-05-27 14:27:54,715 [INFO] All questions completed. Ending game.
+2025-05-27 14:27:54,716 [INFO] Result saved to C:\Users\bost5\Desktop\AI_School\src\results\result_20250527_142754.json
+2025-05-27 14:28:33,237 [INFO] Game ended.
+2025-05-27 14:29:28,107 [INFO] Game started.
+2025-05-27 14:29:28,148 [INFO] Initializing game interface.
+2025-05-27 14:29:28,148 [INFO] Sending request to OpenAI for quiz questions.
+2025-05-27 14:29:30,880 [INFO] Received response from OpenAI.
+2025-05-27 14:29:30,880 [INFO] Parsed 4 questions successfully.
+2025-05-27 14:29:30,949 [INFO] Background image loaded.
+2025-05-27 14:29:30,951 [INFO] Displaying question 1.
+2025-05-27 14:30:05,849 [INFO] Game ended.
