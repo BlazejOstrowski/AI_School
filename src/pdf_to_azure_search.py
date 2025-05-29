@@ -12,7 +12,6 @@ from azure.search.documents.indexes.models import (
     VectorSearch, HnswAlgorithmConfiguration, VectorSearchProfile
 )
 from openai import AzureOpenAI
-from lc_plugins.search_plugin import langchain_search_plugin
 
 # Wczytaj zmienne
 load_dotenv()
@@ -169,16 +168,8 @@ def ask_questions():
         print("\nSemantic:", semantic_response)
         save_to_notebook(q, vector_response, semantic_response)
 
-# Test pluginu LangChain
-def test_plugin():
-    test_question = "What is in the brochure?"
-    plugin_result = langchain_search_plugin(test_question)
-    print("\nLangChain Plugin Result:\n", plugin_result)
-    save_to_notebook("Plugin Test", plugin_result, "(not applicable)")
-
 # === Wykonanie ===
 if __name__ == "__main__":
     create_index()
     index_documents_from_folder(PDF_FOLDER)
-    test_plugin()
     ask_questions()

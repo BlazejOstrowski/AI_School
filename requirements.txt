@@ -5,3 +5,6 @@ pillow
 azure-search-documents>=11.5.0
 PyMuPDF
 nbformat
+azure-functions
+pytest
+pytest-cov
