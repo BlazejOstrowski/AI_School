@@ -73,7 +73,12 @@ def ask_rag(query):
 
     result = qa_chain.invoke({"query": query})
     answer = result.get("result", result)
-    print("\nAnswer:", answer)
+
+    try:
+        print(answer.encode("utf-8").decode("utf-8"))
+    except UnicodeEncodeError:
+        pass  # konsola nie wspiera znaków – pomiń
+
     save_to_notebook(query, answer)
     return answer
 
